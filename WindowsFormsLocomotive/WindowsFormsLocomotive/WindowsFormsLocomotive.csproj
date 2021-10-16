@@ -87,7 +87,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\arrowUp2.png" />
+    <None Include="Resources\arrowUp.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\arrowRight.png" />
