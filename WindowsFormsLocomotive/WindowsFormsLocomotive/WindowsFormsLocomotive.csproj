@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseLocomotive.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="FormLoco.cs">
       <SubType>Form</SubType>
@@ -54,9 +55,11 @@
     <Compile Include="FormLoco.Designer.cs">
       <DependentUpon>FormLoco.cs</DependentUpon>
     </Compile>
+    <Compile Include="ITransport.cs" />
     <Compile Include="Locomotive.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vehicle.cs" />
     <EmbeddedResource Include="FormLoco.resx">
       <DependentUpon>FormLoco.cs</DependentUpon>
     </EmbeddedResource>
@@ -87,12 +90,6 @@
     <None Include="Resources\arrowUp.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\arrowUp1.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\arrowUp2.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\arrowRight.png" />
   </ItemGroup>
   <ItemGroup>
@@ -100,12 +97,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\arrowLeft.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\arrowUp3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\arrowUp4.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

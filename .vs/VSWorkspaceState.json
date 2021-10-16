@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\WindowsFormsLocomotive",
+    "\\WindowsFormsLocomotive\\WindowsFormsLocomotive"
   ],
+  "SelectedNode": "\\WindowsFormsLocomotive\\WindowsFormsLocomotive\\Locomotive.cs",
   "PreviewInSolutionExplorer": false
 }
