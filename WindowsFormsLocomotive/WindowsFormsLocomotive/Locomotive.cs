@@ -39,7 +39,7 @@ namespace WindowsFormsLocomotive
         /// <param name="sportLine">Признак наличия гоночной полосы</param>
         public Locomotive(int maxSpeed, float weight, Color mainColor, Color dopColor,
              bool smokestack, bool frontLight, bool backLight, bool sideLine) :
-        base(maxSpeed, weight, mainColor, 100, 60)
+        base(maxSpeed, weight, mainColor, 130, 70)
         {
             DopColor = dopColor;
             Smokestack = smokestack;

@@ -53,7 +53,7 @@ namespace WindowsFormsLocomotive
             {
                 // вправо
                 case Direction.Right:
-                    if (_startPosX + step < _pictureWidth - locoWidth)
+                    if (_startPosX + step <= _pictureWidth - locoWidth)
                     {
                         _startPosX += step;
                     }

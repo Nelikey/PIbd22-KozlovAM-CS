@@ -23,13 +23,25 @@ namespace WindowsFormsLocomotive
         }
 
         /// <summary>
+        /// Передача машины на форму
+        /// </summary>
+        /// <param name="car"></param>
+        public void SetLoco(ITransport loco)
+        {
+            Random rnd = new Random();
+            this.loco = loco;
+            loco.SetPosition(rnd.Next(10, 100), rnd.Next(10, 100), pictureBoxLocos.Width, pictureBoxLocos.Height);
+            Draw();
+        }
+
+        /// <summary>
         /// Метод отрисовки машины
         /// </summary>
         private void Draw()
         {
             Bitmap bmp = new Bitmap(pictureBoxLocos.Width, pictureBoxLocos.Height);
             Graphics gr = Graphics.FromImage(bmp);
-            loco.DrawTransport(gr);
+            loco?.DrawTransport(gr);
             pictureBoxLocos.Image = bmp;
         }
 
@@ -42,7 +54,6 @@ namespace WindowsFormsLocomotive
         {
             Random rnd = new Random();
             loco = new BaseLocomotive(rnd.Next(100, 300), rnd.Next(1000, 2000), Color.Green);
-
             loco.SetPosition(rnd.Next(10, 100), rnd.Next(10, 100), pictureBoxLocos.Width, pictureBoxLocos.Height);
             Draw();
         }
@@ -72,16 +83,16 @@ namespace WindowsFormsLocomotive
             switch (name)
             {
                 case "buttonUp":
-                    loco.MoveTransport(Direction.Up);
+                    loco?.MoveTransport(Direction.Up);
                     break;
                 case "buttonDown":
-                    loco.MoveTransport(Direction.Down);
+                    loco?.MoveTransport(Direction.Down);
                     break;
                 case "buttonLeft":
-                    loco.MoveTransport(Direction.Left);
+                    loco?.MoveTransport(Direction.Left);
                     break;
                 case "buttonRight":
-                    loco.MoveTransport(Direction.Right);
+                    loco?.MoveTransport(Direction.Right);
                     break;
             }
             Draw();
