@@ -12,12 +12,15 @@ namespace WindowsFormsLocomotive
 {
     public partial class FormLoco : Form
     {
+        private ITransport loco;
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
         public FormLoco()
         {
             InitializeComponent();
         }
-
-        private Locomotive loco;
 
         /// <summary>
         /// Метод отрисовки машины
@@ -31,18 +34,30 @@ namespace WindowsFormsLocomotive
         }
 
         /// <summary>
-        /// Обработка нажатия кнопки "Создать"
+        /// Обработка нажатия кнопки "Создать локомотив"
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void buttonCreate_Click(object sender, EventArgs e)
+        private void buttonCreateBaseLoco_Click(object sender, EventArgs e)
         {
             Random rnd = new Random();
-            loco = new Locomotive();
-            loco.Init(rnd.Next(100, 300), rnd.Next(1000, 2000), Color.Green,
-                Color.Yellow, true, true, true, true);
-            loco.SetPosition(rnd.Next(10, 100),
-                rnd.Next(10, 100), pictureBoxLocos.Width, pictureBoxLocos.Height);
+            loco = new BaseLocomotive(rnd.Next(100, 300), rnd.Next(1000, 2000), Color.Green);
+
+            loco.SetPosition(rnd.Next(10, 100), rnd.Next(10, 100), pictureBoxLocos.Width, pictureBoxLocos.Height);
+            Draw();
+        }
+        /// <summary>
+        /// Обработка нажатия кнопки "Создать тепловоз"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonCreateLoco_Click(object sender, EventArgs e)
+        {
+            Random rnd = new Random();
+            loco = new Locomotive(rnd.Next(100, 300), rnd.Next(1000, 2000), Color.Green,
+           Color.Yellow, true, true, true, true);
+            loco.SetPosition(rnd.Next(10, 100), rnd.Next(10, 100), pictureBoxLocos.Width,
+           pictureBoxLocos.Height);
             Draw();
         }
         /// <summary>
@@ -71,6 +86,6 @@ namespace WindowsFormsLocomotive
             }
             Draw();
         }
-
+        
     }
 }
