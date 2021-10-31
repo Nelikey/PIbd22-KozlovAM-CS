@@ -16,7 +16,11 @@ namespace WindowsFormsLocomotive
         /// <summary>
         /// Массив объектов, которые храним
         /// </summary>
-        private readonly T[] _places;
+        public readonly List<T> _places;
+        /// <summary>
+        /// Максимальное количество мест на парковке
+        /// </summary>
+        private readonly int _maxCount;
         /// <summary>
         /// Ширина окна отрисовки
         /// </summary>
@@ -42,9 +46,10 @@ namespace WindowsFormsLocomotive
         {
             int width = picWidth / _placeSizeWidth;
             int height = picHeight / _placeSizeHeight;
-            _places = new T[width * height];
+            _maxCount = width * height;
             pictureWidth = picWidth;
             pictureHeight = picHeight;
+            _places = new List<T>();
         }
 
         /// <summary>
@@ -54,17 +59,17 @@ namespace WindowsFormsLocomotive
         /// <param name="d">Депо</param>
         /// <param name="loco">Добавляемый локомотив</param>
         /// <returns></returns>
-        public static int operator +(Depot<T> d, T loco)
+        public static bool operator +(Depot<T> d, T loco)
         {
-                for (int i = 0; i < d._places.Length; i++)
-                {
-                    if (d._places[i] == null)
-                    {
-                        d._places[i] = loco;
-                        return i;
-                    }
-                }
-                return -1;
+            if (d._places.Count == d._maxCount)
+            {
+                return false;
+            }
+            else
+            {
+                d._places.Add(loco);
+                return true;
+            }
         }
 
         /// <summary>
@@ -76,10 +81,10 @@ namespace WindowsFormsLocomotive
         /// <returns></returns>
         public static T operator -(Depot<T> d, int index)
         {
-            if (index >= 0 && index < d._places.Length && d._places[index] != null)
+            if (index >= 0 && index < d._places.Count && d._places[index] != null)
             {
                 T temp = d._places[index];
-                d._places[index] = null;
+                d._places.RemoveAt(index);
                 return temp;
             }
             else
@@ -115,14 +120,10 @@ namespace WindowsFormsLocomotive
         public void Draw(Graphics g)
         {
             DrawMarking(g);
-            for (int i = 0; i < pictureHeight / _placeSizeHeight; i++)
+            for (int i = 0; i < _places.Count; ++i)
             {
-                for (int j = 0; j < pictureWidth / _placeSizeWidth; j++)
-                {
-                    int k = (pictureWidth / _placeSizeWidth) * i + j;
-                    _places[k]?.SetPosition(j * _placeSizeWidth, i * _placeSizeHeight, pictureWidth, pictureHeight);
-                    _places[k]?.DrawTransport(g);
-                }
+                _places[i].SetPosition(i % 3 * _placeSizeWidth, i / 3 *_placeSizeHeight + 3, pictureWidth, pictureHeight);
+                _places[i].DrawTransport(g);
             }
         }
     }

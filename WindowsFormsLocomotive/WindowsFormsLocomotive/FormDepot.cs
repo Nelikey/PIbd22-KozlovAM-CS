@@ -13,9 +13,9 @@ namespace WindowsFormsLocomotive
 	public partial class FormDepot : Form
 	{
 		/// <summary>
-		/// Объект от класса-депо
+		/// Объект от класса-коллекции парковок
 		/// </summary>
-		private readonly Depot<BaseLocomotive> depot;
+		private readonly DepotCollection depotCollection;
 
 		/// <summary>
 		/// Конструктор
@@ -23,9 +23,30 @@ namespace WindowsFormsLocomotive
 		public FormDepot()
 		{
 			InitializeComponent();
-			depot = new Depot<BaseLocomotive>(pictureBoxDepot.Width,
-				pictureBoxDepot.Height);
-			Draw();
+			depotCollection = new DepotCollection(pictureBoxDepot.Width, pictureBoxDepot.Height);
+		}
+
+		/// <summary>
+		/// Заполнение listBoxLevels
+		/// </summary>
+		private void ReloadLevels()
+		{
+			int index = listBoxDepots.SelectedIndex;
+			listBoxDepots.Items.Clear();
+			for (int i = 0; i < depotCollection.Keys.Count; i++)
+			{
+				listBoxDepots.Items.Add(depotCollection.Keys[i]);
+			}
+			if (listBoxDepots.Items.Count > 0 && (index == -1 || index >=
+		   listBoxDepots.Items.Count))
+			{
+				listBoxDepots.SelectedIndex = 0;
+			}
+			else if (listBoxDepots.Items.Count > 0 && index > -1 && index <
+		   listBoxDepots.Items.Count)
+			{
+				listBoxDepots.SelectedIndex = index;
+			}
 		}
 
 		/// <summary>
@@ -33,11 +54,53 @@ namespace WindowsFormsLocomotive
 		/// </summary>
 		private void Draw()
 		{
-			Bitmap bmp = new Bitmap(pictureBoxDepot.Width, pictureBoxDepot.Height);
-			Graphics gr = Graphics.FromImage(bmp);
-			depot.Draw(gr);
-			pictureBoxDepot.Image = bmp;
+			if (listBoxDepots.SelectedIndex > -1)
+			{
+			//если выбран один из пуктов в listBox (при старте программы ни один пункт
+			 //не будет выбран и может возникнуть ошибка, если мы попытаемся обратиться к элементу
+			 //listBox)
+				Bitmap bmp = new Bitmap(pictureBoxDepot.Width, pictureBoxDepot.Height);
+				Graphics gr = Graphics.FromImage(bmp);
+				depotCollection[listBoxDepots.SelectedItem.ToString()].Draw(gr);
+				pictureBoxDepot.Image = bmp;
+			}
 		}
+
+		/// <summary>
+		/// Обработка нажатия кнопки "Добавить парковку"
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void buttonAddParking_Click(object sender, EventArgs e)
+		{
+			if (string.IsNullOrEmpty(textBoxNewLevelName.Text))
+			{
+				MessageBox.Show("Введите название депо", "Ошибка",
+			   MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+			depotCollection.AddDepot(textBoxNewLevelName.Text);
+			ReloadLevels();
+		}
+
+		/// <summary>
+		/// Обработка нажатия кнопки "Удалить парковку"
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void buttonDelParking_Click(object sender, EventArgs e)
+		{
+			if (listBoxDepots.SelectedIndex > -1)
+			{
+				if (MessageBox.Show($"Удалить депо { listBoxDepots.SelectedItem.ToString()}?", "Удаление", MessageBoxButtons.YesNo,
+		   MessageBoxIcon.Question) == DialogResult.Yes)
+				{
+					depotCollection.DelDepot(listBoxDepots.SelectedItem.ToString());
+					ReloadLevels();
+				}
+			}
+		}
+
 
 		/// <summary>
 		/// Обработка нажатия кнопки "Поставить локомотив в депо"
@@ -46,17 +109,20 @@ namespace WindowsFormsLocomotive
 		/// <param name="e"></param>
 		private void buttonSetBaseLoco_Click(object sender, EventArgs e)
 		{
-			ColorDialog dialog = new ColorDialog();
-			if (dialog.ShowDialog() == DialogResult.OK)
+			if (listBoxDepots.SelectedIndex > -1)
 			{
-				var car = new BaseLocomotive(100, 1000, dialog.Color);
-				if (depot + car != -1)
+				ColorDialog dialog = new ColorDialog();
+				if (dialog.ShowDialog() == DialogResult.OK)
 				{
-					Draw();
-				}
-				else
-				{
-					MessageBox.Show("Парковка переполнена");
+					var baseloco = new BaseLocomotive(100, 1000, dialog.Color);
+					if (depotCollection[listBoxDepots.SelectedItem.ToString()] + baseloco)
+					{
+						Draw();
+					}
+					else
+					{
+						MessageBox.Show("Депо переполнено");
+					}
 				}
 			}
 		}
@@ -67,25 +133,27 @@ namespace WindowsFormsLocomotive
 		/// <param name="e"></param>
 		private void buttonSetLoco_Click(object sender, EventArgs e)
 		{
+			if (listBoxDepots.SelectedIndex > -1)
+			{
 				ColorDialog dialog = new ColorDialog();
 				if (dialog.ShowDialog() == DialogResult.OK)
 				{
 					ColorDialog dialogDop = new ColorDialog();
 					if (dialogDop.ShowDialog() == DialogResult.OK)
 					{
-						var car = new Locomotive(100, 1000, dialog.Color, dialogDop.Color,
-					   true, true, true, true);
-						if (depot + car != -1)
+						var loco = new Locomotive(100, 1000, dialog.Color, dialogDop.Color, true, true, true, true);
+						if (depotCollection[listBoxDepots.SelectedItem.ToString()] + loco)
 						{
 							Draw();
 						}
 						else
 						{
-							MessageBox.Show("Парковка переполнена");
+							MessageBox.Show("Депо переполнена");
 						}
 					}
 				}
 			}
+		}
 
 		/// <summary>
 		/// Обработка нажатия кнопки "Забрать"
@@ -94,9 +162,9 @@ namespace WindowsFormsLocomotive
 		/// <param name="e"></param>
 		private void buttonTakeLoco_Click(object sender, EventArgs e)
 		{
-			if (maskedTextBox.Text != "")
+			if (listBoxDepots.SelectedIndex > -1 && maskedTextBox.Text != "")
 			{
-				var loco = depot - Convert.ToInt32(maskedTextBox.Text);
+				var loco = depotCollection[listBoxDepots.SelectedItem.ToString()] - Convert.ToInt32(maskedTextBox.Text);
 				if (loco != null)
 				{
 					FormLoco form = new FormLoco();
@@ -107,5 +175,15 @@ namespace WindowsFormsLocomotive
 			}
 
 		}
-	}
+
+		/// <summary>
+		/// Метод обработки выбора элемента на listBoxLevels
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+        private void listBoxDepots_SelectedIndexChanged(object sender, EventArgs e)
+        {
+			Draw();
+		}
+    }
 }
