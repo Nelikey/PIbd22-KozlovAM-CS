@@ -103,59 +103,6 @@ namespace WindowsFormsLocomotive
 
 
 		/// <summary>
-		/// Обработка нажатия кнопки "Поставить локомотив в депо"
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void buttonSetBaseLoco_Click(object sender, EventArgs e)
-		{
-			if (listBoxDepots.SelectedIndex > -1)
-			{
-				ColorDialog dialog = new ColorDialog();
-				if (dialog.ShowDialog() == DialogResult.OK)
-				{
-					var baseloco = new BaseLocomotive(100, 1000, dialog.Color);
-					if (depotCollection[listBoxDepots.SelectedItem.ToString()] + baseloco)
-					{
-						Draw();
-					}
-					else
-					{
-						MessageBox.Show("Депо переполнено");
-					}
-				}
-			}
-		}
-		/// <summary>
-		/// Обработка нажатия кнопки "Поставить тепловоз в депо"
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void buttonSetLoco_Click(object sender, EventArgs e)
-		{
-			if (listBoxDepots.SelectedIndex > -1)
-			{
-				ColorDialog dialog = new ColorDialog();
-				if (dialog.ShowDialog() == DialogResult.OK)
-				{
-					ColorDialog dialogDop = new ColorDialog();
-					if (dialogDop.ShowDialog() == DialogResult.OK)
-					{
-						var loco = new Locomotive(100, 1000, dialog.Color, dialogDop.Color, true, true, true, true);
-						if (depotCollection[listBoxDepots.SelectedItem.ToString()] + loco)
-						{
-							Draw();
-						}
-						else
-						{
-							MessageBox.Show("Депо переполнена");
-						}
-					}
-				}
-			}
-		}
-
-		/// <summary>
 		/// Обработка нажатия кнопки "Забрать"
 		/// </summary>
 		/// <param name="sender"></param>
@@ -173,7 +120,6 @@ namespace WindowsFormsLocomotive
 				}
 				Draw();
 			}
-
 		}
 
 		/// <summary>
@@ -185,5 +131,38 @@ namespace WindowsFormsLocomotive
         {
 			Draw();
 		}
+
+		/// <summary>
+		/// Обработка нажатия кнопки "Добавить автомобиль"
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void buttonSetLoco_Click(object sender, EventArgs e)
+		{
+			var formLocoConfig = new FormLocoConfig();
+			formLocoConfig.AddEvent(AddLoco);
+			formLocoConfig.Show();
+		}
+
+		/// <summary>
+		/// Метод добавления машины
+		/// </summary>
+		/// <param name="car"></param>
+		private void AddLoco(Vehicle loco)
+		{
+			if (loco != null && listBoxDepots.SelectedIndex > -1)
+			{
+				if ((depotCollection[listBoxDepots.SelectedItem.ToString()]) + loco)
+				{
+					Draw();
+				}
+				else
+				{
+					MessageBox.Show("Машину не удалось поставить");
+				}
+			}
+		}
+
+        
     }
 }

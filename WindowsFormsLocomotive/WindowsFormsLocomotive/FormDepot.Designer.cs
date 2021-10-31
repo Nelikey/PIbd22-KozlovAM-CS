@@ -29,8 +29,6 @@
 		private void InitializeComponent()
 		{
             this.pictureBoxDepot = new System.Windows.Forms.PictureBox();
-            this.buttonSetBaseLoco = new System.Windows.Forms.Button();
-            this.buttonSetLoco = new System.Windows.Forms.Button();
             this.buttonTakeLoco = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -40,6 +38,7 @@
             this.buttonAddParking = new System.Windows.Forms.Button();
             this.listBoxDepots = new System.Windows.Forms.ListBox();
             this.buttonDelParking = new System.Windows.Forms.Button();
+            this.buttonSetLoco = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDepot)).BeginInit();
             this.SuspendLayout();
             // 
@@ -50,26 +49,6 @@
             this.pictureBoxDepot.Size = new System.Drawing.Size(666, 445);
             this.pictureBoxDepot.TabIndex = 1;
             this.pictureBoxDepot.TabStop = false;
-            // 
-            // buttonSetBaseLoco
-            // 
-            this.buttonSetBaseLoco.Location = new System.Drawing.Point(678, 269);
-            this.buttonSetBaseLoco.Name = "buttonSetBaseLoco";
-            this.buttonSetBaseLoco.Size = new System.Drawing.Size(110, 45);
-            this.buttonSetBaseLoco.TabIndex = 2;
-            this.buttonSetBaseLoco.Text = "Поставить локомотив в депо";
-            this.buttonSetBaseLoco.UseVisualStyleBackColor = true;
-            this.buttonSetBaseLoco.Click += new System.EventHandler(this.buttonSetBaseLoco_Click);
-            // 
-            // buttonSetLoco
-            // 
-            this.buttonSetLoco.Location = new System.Drawing.Point(678, 320);
-            this.buttonSetLoco.Name = "buttonSetLoco";
-            this.buttonSetLoco.Size = new System.Drawing.Size(110, 43);
-            this.buttonSetLoco.TabIndex = 3;
-            this.buttonSetLoco.Text = "Поставить тепловоз в депо";
-            this.buttonSetLoco.UseVisualStyleBackColor = true;
-            this.buttonSetLoco.Click += new System.EventHandler(this.buttonSetLoco_Click);
             // 
             // buttonTakeLoco
             // 
@@ -152,11 +131,22 @@
             this.buttonDelParking.UseVisualStyleBackColor = true;
             this.buttonDelParking.Click += new System.EventHandler(this.buttonDelParking_Click);
             // 
+            // buttonSetLoco
+            // 
+            this.buttonSetLoco.Location = new System.Drawing.Point(678, 305);
+            this.buttonSetLoco.Name = "buttonSetLoco";
+            this.buttonSetLoco.Size = new System.Drawing.Size(110, 48);
+            this.buttonSetLoco.TabIndex = 13;
+            this.buttonSetLoco.Text = "Добавить локомотив";
+            this.buttonSetLoco.UseVisualStyleBackColor = true;
+            this.buttonSetLoco.Click += new System.EventHandler(this.buttonSetLoco_Click);
+            // 
             // FormDepot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonSetLoco);
             this.Controls.Add(this.buttonDelParking);
             this.Controls.Add(this.listBoxDepots);
             this.Controls.Add(this.buttonAddParking);
@@ -166,8 +156,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonTakeLoco);
-            this.Controls.Add(this.buttonSetLoco);
-            this.Controls.Add(this.buttonSetBaseLoco);
             this.Controls.Add(this.pictureBoxDepot);
             this.Name = "FormDepot";
             this.Text = "Депо";
@@ -180,8 +168,6 @@
 		#endregion
 
 		private System.Windows.Forms.PictureBox pictureBoxDepot;
-		private System.Windows.Forms.Button buttonSetBaseLoco;
-		private System.Windows.Forms.Button buttonSetLoco;
 		private System.Windows.Forms.Button buttonTakeLoco;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
@@ -191,5 +177,6 @@
         private System.Windows.Forms.Button buttonAddParking;
         private System.Windows.Forms.ListBox listBoxDepots;
         private System.Windows.Forms.Button buttonDelParking;
+        private System.Windows.Forms.Button buttonSetLoco;
     }
 }

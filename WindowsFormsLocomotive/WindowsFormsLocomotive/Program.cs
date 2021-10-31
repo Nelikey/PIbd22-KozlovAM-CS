@@ -17,6 +17,7 @@ namespace WindowsFormsLocomotive
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormDepot());
+            //Application.Run(new FormLocoConfig());
         }
     }
 }
