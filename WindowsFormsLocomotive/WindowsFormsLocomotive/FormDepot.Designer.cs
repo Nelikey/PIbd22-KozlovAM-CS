@@ -35,6 +35,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.maskedTextBox = new System.Windows.Forms.MaskedTextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textBoxNewLevelName = new System.Windows.Forms.TextBox();
+            this.buttonAddParking = new System.Windows.Forms.Button();
+            this.listBoxDepots = new System.Windows.Forms.ListBox();
+            this.buttonDelParking = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDepot)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,7 +53,7 @@
             // 
             // buttonSetBaseLoco
             // 
-            this.buttonSetBaseLoco.Location = new System.Drawing.Point(678, 22);
+            this.buttonSetBaseLoco.Location = new System.Drawing.Point(678, 269);
             this.buttonSetBaseLoco.Name = "buttonSetBaseLoco";
             this.buttonSetBaseLoco.Size = new System.Drawing.Size(110, 45);
             this.buttonSetBaseLoco.TabIndex = 2;
@@ -58,7 +63,7 @@
             // 
             // buttonSetLoco
             // 
-            this.buttonSetLoco.Location = new System.Drawing.Point(678, 73);
+            this.buttonSetLoco.Location = new System.Drawing.Point(678, 320);
             this.buttonSetLoco.Name = "buttonSetLoco";
             this.buttonSetLoco.Size = new System.Drawing.Size(110, 43);
             this.buttonSetLoco.TabIndex = 3;
@@ -68,7 +73,7 @@
             // 
             // buttonTakeLoco
             // 
-            this.buttonTakeLoco.Location = new System.Drawing.Point(678, 176);
+            this.buttonTakeLoco.Location = new System.Drawing.Point(678, 423);
             this.buttonTakeLoco.Name = "buttonTakeLoco";
             this.buttonTakeLoco.Size = new System.Drawing.Size(110, 23);
             this.buttonTakeLoco.TabIndex = 4;
@@ -79,7 +84,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(675, 129);
+            this.label1.Location = new System.Drawing.Point(675, 376);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(107, 13);
             this.label1.TabIndex = 5;
@@ -88,7 +93,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(675, 153);
+            this.label2.Location = new System.Drawing.Point(675, 400);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(42, 13);
             this.label2.TabIndex = 6;
@@ -96,17 +101,67 @@
             // 
             // maskedTextBox
             // 
-            this.maskedTextBox.Location = new System.Drawing.Point(723, 150);
+            this.maskedTextBox.Location = new System.Drawing.Point(723, 397);
             this.maskedTextBox.Mask = "00";
             this.maskedTextBox.Name = "maskedTextBox";
             this.maskedTextBox.Size = new System.Drawing.Size(65, 20);
             this.maskedTextBox.TabIndex = 7;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(715, 9);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(37, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Депо:";
+            // 
+            // textBoxNewLevelName
+            // 
+            this.textBoxNewLevelName.Location = new System.Drawing.Point(678, 25);
+            this.textBoxNewLevelName.Name = "textBoxNewLevelName";
+            this.textBoxNewLevelName.Size = new System.Drawing.Size(110, 20);
+            this.textBoxNewLevelName.TabIndex = 9;
+            // 
+            // buttonAddParking
+            // 
+            this.buttonAddParking.Location = new System.Drawing.Point(678, 51);
+            this.buttonAddParking.Name = "buttonAddParking";
+            this.buttonAddParking.Size = new System.Drawing.Size(110, 23);
+            this.buttonAddParking.TabIndex = 10;
+            this.buttonAddParking.Text = "Добавить депо";
+            this.buttonAddParking.UseVisualStyleBackColor = true;
+            this.buttonAddParking.Click += new System.EventHandler(this.buttonAddParking_Click);
+            // 
+            // listBoxDepots
+            // 
+            this.listBoxDepots.FormattingEnabled = true;
+            this.listBoxDepots.Location = new System.Drawing.Point(678, 80);
+            this.listBoxDepots.Name = "listBoxDepots";
+            this.listBoxDepots.Size = new System.Drawing.Size(110, 95);
+            this.listBoxDepots.TabIndex = 11;
+            this.listBoxDepots.SelectedIndexChanged += new System.EventHandler(this.listBoxDepots_SelectedIndexChanged);
+            // 
+            // buttonDelParking
+            // 
+            this.buttonDelParking.Location = new System.Drawing.Point(678, 181);
+            this.buttonDelParking.Name = "buttonDelParking";
+            this.buttonDelParking.Size = new System.Drawing.Size(110, 23);
+            this.buttonDelParking.TabIndex = 12;
+            this.buttonDelParking.Text = "Удалить депо";
+            this.buttonDelParking.UseVisualStyleBackColor = true;
+            this.buttonDelParking.Click += new System.EventHandler(this.buttonDelParking_Click);
             // 
             // FormDepot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.buttonDelParking);
+            this.Controls.Add(this.listBoxDepots);
+            this.Controls.Add(this.buttonAddParking);
+            this.Controls.Add(this.textBoxNewLevelName);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.maskedTextBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -131,5 +186,10 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.MaskedTextBox maskedTextBox;
-	}
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textBoxNewLevelName;
+        private System.Windows.Forms.Button buttonAddParking;
+        private System.Windows.Forms.ListBox listBoxDepots;
+        private System.Windows.Forms.Button buttonDelParking;
+    }
 }
