@@ -16,7 +16,7 @@ namespace WindowsFormsLocomotive
         /// <summary>
         /// Массив объектов, которые храним
         /// </summary>
-        public readonly List<T> _places;
+        private readonly List<T> _places;
         /// <summary>
         /// Максимальное количество мест на парковке
         /// </summary>

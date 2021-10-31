@@ -95,5 +95,14 @@ namespace WindowsFormsLocomotive
                 g.DrawLines(dopPen, new PointF[] { new PointF(x + 10, y + 31), new PointF(x + 20, y + 26), new PointF(x + 121, y + 26) });
             }
         }
+
+        /// <summary>
+        /// Смена дополнительного цвета
+        /// </summary>
+        /// <param name="color"></param>
+        public void SetDopColor(Color color)
+        {
+            DopColor = color;
+        }
     }
 }
