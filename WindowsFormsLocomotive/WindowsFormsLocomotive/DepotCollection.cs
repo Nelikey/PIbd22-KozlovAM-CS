@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace WindowsFormsLocomotive
@@ -30,6 +31,11 @@ namespace WindowsFormsLocomotive
         /// Высота окна отрисовки
         /// </summary>
         private readonly int pictureHeight;
+
+        /// <summary>
+        /// Разделитель для записи информации в файл
+        /// </summary>
+        private readonly char separator = ':';
 
         /// <summary>
         /// Конструктор
@@ -85,6 +91,164 @@ namespace WindowsFormsLocomotive
             {
                 AddDepot(ind);
             }
+        }
+
+        /// <summary>
+        /// Метод записи информации в файл
+        /// </summary>
+        /// <param name="text">Строка, которую следует записать</param>
+        /// <param name="stream">Поток для записи</param>
+            //private void WriteToFile(string text, FileStream stream)
+            //{
+            //    byte[] info = new UTF8Encoding(true).GetBytes(text);
+            //    stream.Write(info, 0, info.Length);
+            //}
+
+        /// <summary>
+        /// Сохранение информации по автомобилям на парковках в файл
+        /// </summary>
+        /// <param name="filename">Путь и имя файла</param>
+        /// <returns></returns>
+        public bool SaveData(string filename)
+        {
+            using (StreamWriter streamWriter = new StreamWriter(filename, false, System.Text.Encoding.Default))
+            {
+                streamWriter.WriteLine("DepotCollection");
+                foreach (var level in depotStages)
+                {
+                    //Начинаем парковку
+                    streamWriter.WriteLine($"Depot{separator}{level.Key}");
+                    ITransport loco = null;
+                    for (int i = 0; (loco = level.Value.GetNext(i)) != null; i++)
+                    {
+                        if (loco != null)
+                        {
+                            //если место не пустое
+                            //Записываем тип локомотива
+                            if (loco.GetType().Name == "BaseLocomotive")
+                            {
+                                streamWriter.Write($"BaseLocomotive{separator}");
+                            }
+                            if (loco.GetType().Name == "Locomotive")
+                            {
+                                streamWriter.Write($"Locomotive{separator}");
+                            }
+                            //Записываемые параметры
+                            streamWriter.WriteLine(loco);
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Загрузка нформации по автомобилям на парковках из файла
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
+        public bool LoadData(string filename)
+        {
+            if (!File.Exists(filename))
+            {
+                return false;
+            }
+            using (StreamReader streamReader = new StreamReader(filename, System.Text.Encoding.Default))
+            {
+                if (streamReader.ReadLine().Contains("DepotCollection"))
+                {
+                    //очищаем записи
+                    depotStages.Clear();
+                }
+                else
+                {
+                    //если нет такой записи, то это не те данные
+                    return false;
+                }
+                Vehicle loco = null;
+                string key = string.Empty;
+                string line;
+                while ((line = streamReader.ReadLine()) != null)
+                {
+                    if (line.Contains("Depot"))
+                    {
+                        key = line.Substring(6);
+                        depotStages.Add(key, new Depot<Vehicle>(pictureWidth, pictureHeight));
+                        continue;
+                    }
+                    if (string.IsNullOrEmpty(line))
+                    {
+                        continue;
+                    }
+                    if (line.Contains("BaseLocomotive"))
+                    {
+                        loco = new BaseLocomotive(line.Substring(15));
+                    }
+                    else if (line.Contains("Locomotive")){
+                        loco = new Locomotive(line.Substring(11));
+                    }
+                    var result = depotStages[key] + loco;
+                    if (!result)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            //string bufferTextFromFile = "";
+            //using (FileStream fs = new FileStream(filename, FileMode.Open))
+            //{
+            //    byte[] b = new byte[fs.Length];
+            //    UTF8Encoding temp = new UTF8Encoding(true);
+            //    while (fs.Read(b, 0, b.Length) > 0)
+            //    {
+            //        bufferTextFromFile += temp.GetString(b);
+            //    }
+            //}
+            //bufferTextFromFile = bufferTextFromFile.Replace("\r", "");
+            //var strs = bufferTextFromFile.Split('\n');
+            //if (strs[0].Contains("DepotCollection"))
+            //{
+            //    //очищаем записи
+            //    depotStages.Clear();
+            //}
+            //else
+            //{
+            //    //если нет такой записи, то это не те данные
+            //    return false;
+            //}
+            //Vehicle loco = null;
+            //string key = string.Empty;
+            //for (int i = 1; i < strs.Length; ++i)
+            //{
+            //    //идем по считанным записям
+            //    if (strs[i].Contains("Depot"))
+            //    {
+            //    //начинаем новую парковку
+            //        key = strs[i].Split(separator)[1];
+            //        depotStages.Add(key, new Depot<Vehicle>(pictureWidth, pictureHeight));
+            //        continue;
+            //    }
+            //    if (string.IsNullOrEmpty(strs[i]))
+            //    {
+            //        continue;
+            //    }
+            //    if (strs[i].Split(separator)[0] == "BaseLocomotive")
+            //    {
+            //        loco = new BaseLocomotive(strs[i].Split(separator)[1]);
+            //    }
+            //    else if (strs[i].Split(separator)[0] == "SportCar")
+            //    {
+            //        loco = new Locomotive(strs[i].Split(separator)[1]);
+            //    }
+            //    var result = depotStages[key] + loco;
+            //    if (!result)
+            //    {
+            //        return false;
+            //    }
+            //}
+            //return true;
         }
     }
 }
