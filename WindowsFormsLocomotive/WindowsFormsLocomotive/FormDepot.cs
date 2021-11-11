@@ -204,5 +204,14 @@ namespace WindowsFormsLocomotive
 				}
 			}
 		}
+
+        private void textBoxNewLevelName_TextChanged(object sender, EventArgs e)
+        {
+			if (textBoxNewLevelName.Text.Contains(";") || textBoxNewLevelName.Text.Contains(":"))
+            {
+				MessageBox.Show("В названии депо нельзя использовать знаки \";\" и \":\"", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				textBoxNewLevelName.Text = "";
+			}
+        }
     }
 }

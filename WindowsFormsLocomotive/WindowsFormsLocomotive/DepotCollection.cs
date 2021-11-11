@@ -195,60 +195,6 @@ namespace WindowsFormsLocomotive
                 }
                 return true;
             }
-
-            //string bufferTextFromFile = "";
-            //using (FileStream fs = new FileStream(filename, FileMode.Open))
-            //{
-            //    byte[] b = new byte[fs.Length];
-            //    UTF8Encoding temp = new UTF8Encoding(true);
-            //    while (fs.Read(b, 0, b.Length) > 0)
-            //    {
-            //        bufferTextFromFile += temp.GetString(b);
-            //    }
-            //}
-            //bufferTextFromFile = bufferTextFromFile.Replace("\r", "");
-            //var strs = bufferTextFromFile.Split('\n');
-            //if (strs[0].Contains("DepotCollection"))
-            //{
-            //    //очищаем записи
-            //    depotStages.Clear();
-            //}
-            //else
-            //{
-            //    //если нет такой записи, то это не те данные
-            //    return false;
-            //}
-            //Vehicle loco = null;
-            //string key = string.Empty;
-            //for (int i = 1; i < strs.Length; ++i)
-            //{
-            //    //идем по считанным записям
-            //    if (strs[i].Contains("Depot"))
-            //    {
-            //    //начинаем новую парковку
-            //        key = strs[i].Split(separator)[1];
-            //        depotStages.Add(key, new Depot<Vehicle>(pictureWidth, pictureHeight));
-            //        continue;
-            //    }
-            //    if (string.IsNullOrEmpty(strs[i]))
-            //    {
-            //        continue;
-            //    }
-            //    if (strs[i].Split(separator)[0] == "BaseLocomotive")
-            //    {
-            //        loco = new BaseLocomotive(strs[i].Split(separator)[1]);
-            //    }
-            //    else if (strs[i].Split(separator)[0] == "SportCar")
-            //    {
-            //        loco = new Locomotive(strs[i].Split(separator)[1]);
-            //    }
-            //    var result = depotStages[key] + loco;
-            //    if (!result)
-            //    {
-            //        return false;
-            //    }
-            //}
-            //return true;
         }
     }
 }
