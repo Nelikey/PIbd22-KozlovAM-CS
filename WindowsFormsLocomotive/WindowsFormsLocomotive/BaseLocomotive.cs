@@ -13,10 +13,17 @@ namespace WindowsFormsLocomotive
         /// Ширина отрисовки локомотива
         /// </summary>
         private readonly int locoWidth = 130;
+
         /// <summary>
         /// Высота отрисовки локомотива
         /// </summary>
         private readonly int locoHeight = 70;
+
+        /// <summary>
+        /// Разделитель для записи информации по объекту в файл
+        /// </summary>
+        protected readonly char separator = ';';
+
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -29,6 +36,21 @@ namespace WindowsFormsLocomotive
             Weight = weight;
             MainColor = mainColor;
         }
+        /// <summary>
+        /// Конструктор для загрузки с файла
+        /// </summary>
+        /// <param name="info">Информация по объекту</param>
+        public BaseLocomotive(string info)
+        {
+            string[] strs = info.Split(separator);
+            if (strs.Length == 3)
+            {
+                MaxSpeed = Convert.ToInt32(strs[0]);
+                Weight = Convert.ToInt32(strs[1]);
+                MainColor = Color.FromName(strs[2]);
+            }
+        }
+
         /// <summary>
         /// Конструктор с изменением размеров локомотива
         /// </summary> 
@@ -152,6 +174,11 @@ namespace WindowsFormsLocomotive
             //отрисовка задней части
             g.FillRectangle(blackBrush, x + 121, y + 2, 3, 36);
             g.DrawRectangle(pen, x + 121, y + 2, 3, 36);
+        }
+
+        public override string ToString()
+        {
+            return $"{MaxSpeed}{separator}{Weight}{separator}{MainColor.Name}";
         }
     }
 }
