@@ -63,7 +63,7 @@ namespace WindowsFormsLocomotive
         {
             if (d._places.Count == d._maxCount)
             {
-                return false;
+                throw new DepotOverflowException();
             }
             else
             {
@@ -81,15 +81,15 @@ namespace WindowsFormsLocomotive
         /// <returns></returns>
         public static T operator -(Depot<T> d, int index)
         {
-            if (index >= 0 && index < d._places.Count && d._places[index] != null)
+            if (index < -1 || index > d._places.Count)
+            {
+                throw new DepotNotFoundException(index);
+            }
+            else
             {
                 T temp = d._places[index];
                 d._places.RemoveAt(index);
                 return temp;
-            }
-            else
-            {
-                return null;
             }
         }
 
