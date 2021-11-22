@@ -143,17 +143,12 @@ namespace WindowsFormsLocomotive
             }
             using (StreamReader streamReader = new StreamReader(filename, System.Text.Encoding.Default))
             {
-                try
+                if (!streamReader.ReadLine().Contains("DepotCollection"))
                 {
-                    streamReader.ReadLine().Contains("DepotCollection");
-                    //очищаем записи
-                    depotStages.Clear();
-                }
-                catch (NullReferenceException ex)
-                {
-                    //если нет такой записи, то это не те данные
                     throw new System.NullReferenceException("Выбранный файл не соответствует требованиям к загрузочному файлу: ");
                 }
+                //очищаем записи
+                depotStages.Clear();
 
                 Vehicle loco = null;
                 string key = string.Empty;
