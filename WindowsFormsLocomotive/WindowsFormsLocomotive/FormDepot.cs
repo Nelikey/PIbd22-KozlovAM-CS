@@ -78,7 +78,7 @@ namespace WindowsFormsLocomotive
 			if (string.IsNullOrEmpty(textBoxNewLevelName.Text))
 			{
 				MessageBox.Show("Введите название депо", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				logger.Error("Не было введено название депо при добавлении");
+				logger.Warn("Не было введено название депо при добавлении");
 				return;
 			}
 			logger.Info($"Добавили депо {textBoxNewLevelName.Text}");
@@ -131,12 +131,12 @@ namespace WindowsFormsLocomotive
 				catch (DepotNotFoundException ex)
 				{
 					MessageBox.Show(ex.Message, "Не найдено", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					logger.Error(ex.Message);
+					logger.Warn(ex.Message);
 				}
 				catch (Exception ex)
 				{
 					MessageBox.Show(ex.Message, "Неизвестная ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					logger.Error(ex.Message);
+					logger.Warn(ex.Message);
 				}
 			}
 		}
@@ -183,19 +183,19 @@ namespace WindowsFormsLocomotive
 					else
 					{
 						MessageBox.Show("Локомотив не удалось поставить");
-						logger.Error($"Локомотив не удалось поставить {loco}");
+						logger.Warn($"Локомотив не удалось поставить {loco}");
 					}
 					Draw();
 				}
 				catch (DepotOverflowException ex)
 				{
 					MessageBox.Show(ex.Message, "Переполнение", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					logger.Error(ex.Message);
+					logger.Warn(ex.Message);
 				}
 				catch (Exception ex)
 				{
 					MessageBox.Show(ex.Message, "Неизвестная ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					logger.Error(ex.Message);
+					logger.Warn(ex.Message);
 				}
 			}
 		}
@@ -220,7 +220,7 @@ namespace WindowsFormsLocomotive
 				{
 					MessageBox.Show(ex.Message, "Неизвестная ошибка при сохранении",
 						MessageBoxButtons.OK, MessageBoxIcon.Error);
-					logger.Error(ex.Message);
+					logger.Warn(ex.Message);
 				}
 			}
 		}
@@ -245,17 +245,17 @@ namespace WindowsFormsLocomotive
 				catch (NullReferenceException ex)
 				{
 					MessageBox.Show(ex.Message, "Ошибка при сохранении", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					logger.Error(ex.Message + openFileDialog.FileName);
+					logger.Warn(ex.Message + openFileDialog.FileName);
 				}
 				catch (InvalidOperationException ex)
                 {
 					MessageBox.Show(ex.Message, "Ошибка при сохранении", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					logger.Error(ex.Message + openFileDialog.FileName);
+					logger.Warn(ex.Message + openFileDialog.FileName);
 				}
 				catch (IOException ex)
                 {
 					MessageBox.Show(ex.Message, "Ошибка при сохранении", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					logger.Error(ex.Message + openFileDialog.FileName);
+					logger.Warn(ex.Message + openFileDialog.FileName);
 				}
 				catch (Exception ex)
                 {
