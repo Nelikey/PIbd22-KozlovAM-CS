@@ -94,22 +94,11 @@ namespace WindowsFormsLocomotive
         }
 
         /// <summary>
-        /// Метод записи информации в файл
-        /// </summary>
-        /// <param name="text">Строка, которую следует записать</param>
-        /// <param name="stream">Поток для записи</param>
-            //private void WriteToFile(string text, FileStream stream)
-            //{
-            //    byte[] info = new UTF8Encoding(true).GetBytes(text);
-            //    stream.Write(info, 0, info.Length);
-            //}
-
-        /// <summary>
         /// Сохранение информации по автомобилям на парковках в файл
         /// </summary>
         /// <param name="filename">Путь и имя файла</param>
         /// <returns></returns>
-        public bool SaveData(string filename)
+        public void SaveData(string filename)
         {
             using (StreamWriter streamWriter = new StreamWriter(filename, false, System.Text.Encoding.Default))
             {
@@ -139,7 +128,6 @@ namespace WindowsFormsLocomotive
                     }
                 }
             }
-            return true;
         }
 
         /// <summary>
@@ -147,24 +135,21 @@ namespace WindowsFormsLocomotive
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        public bool LoadData(string filename)
+        public void LoadData(string filename)
         {
             if (!File.Exists(filename))
             {
-                return false;
+                throw new IOException("Файла по выбранному пути не существует: ");
             }
             using (StreamReader streamReader = new StreamReader(filename, System.Text.Encoding.Default))
             {
-                if (streamReader.ReadLine().Contains("DepotCollection"))
+                if (!streamReader.ReadLine().Contains("DepotCollection"))
                 {
-                    //очищаем записи
-                    depotStages.Clear();
+                    throw new System.NullReferenceException("Выбранный файл не соответствует требованиям к загрузочному файлу: ");
                 }
-                else
-                {
-                    //если нет такой записи, то это не те данные
-                    return false;
-                }
+                //очищаем записи
+                depotStages.Clear();
+
                 Vehicle loco = null;
                 string key = string.Empty;
                 string line;
@@ -190,10 +175,9 @@ namespace WindowsFormsLocomotive
                     var result = depotStages[key] + loco;
                     if (!result)
                     {
-                        return false;
+                        throw new InvalidOperationException("Не удалось загрузить локомотив в депо");
                     }
                 }
-                return true;
             }
         }
     }

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using System.IO;
+using NLog;
+using System;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsLocomotive
@@ -18,12 +14,18 @@ namespace WindowsFormsLocomotive
 		private readonly DepotCollection depotCollection;
 
 		/// <summary>
+		/// Логгер
+		/// </summary>
+		private readonly Logger logger;
+
+		/// <summary>
 		/// Конструктор
 		/// </summary>
 		public FormDepot()
 		{
 			InitializeComponent();
 			depotCollection = new DepotCollection(pictureBoxDepot.Width, pictureBoxDepot.Height);
+			logger = LogManager.GetCurrentClassLogger();
 		}
 
 		/// <summary>
@@ -75,10 +77,11 @@ namespace WindowsFormsLocomotive
 		{
 			if (string.IsNullOrEmpty(textBoxNewLevelName.Text))
 			{
-				MessageBox.Show("Введите название депо", "Ошибка",
-			   MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("Введите название депо", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				logger.Warn("Не было введено название депо при добавлении");
 				return;
 			}
+			logger.Info($"Добавили депо {textBoxNewLevelName.Text}");
 			depotCollection.AddDepot(textBoxNewLevelName.Text);
 			ReloadLevels();
 		}
@@ -92,15 +95,15 @@ namespace WindowsFormsLocomotive
 		{
 			if (listBoxDepots.SelectedIndex > -1)
 			{
-				if (MessageBox.Show($"Удалить депо { listBoxDepots.SelectedItem.ToString()}?", "Удаление", MessageBoxButtons.YesNo,
-		   MessageBoxIcon.Question) == DialogResult.Yes)
+				if (MessageBox.Show($"Удалить депо { listBoxDepots.SelectedItem.ToString()}?",
+					"Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 				{
+					logger.Info($"Удалили парковку{ listBoxDepots.SelectedItem.ToString() }");
 					depotCollection.DelDepot(listBoxDepots.SelectedItem.ToString());
 					ReloadLevels();
 				}
 			}
 		}
-
 
 		/// <summary>
 		/// Обработка нажатия кнопки "Забрать"
@@ -111,14 +114,30 @@ namespace WindowsFormsLocomotive
 		{
 			if (listBoxDepots.SelectedIndex > -1 && maskedTextBox.Text != "")
 			{
-				var loco = depotCollection[listBoxDepots.SelectedItem.ToString()] - Convert.ToInt32(maskedTextBox.Text);
-				if (loco != null)
-				{
-					FormLoco form = new FormLoco();
-					form.SetLoco(loco);
-					form.ShowDialog();
+				try
+                {
+					var loco = depotCollection[listBoxDepots.SelectedItem.ToString()] - Convert.ToInt32(maskedTextBox.Text);
+					if (loco != null)
+					{
+						FormLoco form = new FormLoco();
+						form.SetLoco(loco);
+						form.ShowDialog();
+
+						logger.Info($"Изъят локомотив {loco} с места {maskedTextBox.Text}");
+
+						Draw();
+					}
 				}
-				Draw();
+				catch (DepotNotFoundException ex)
+				{
+					MessageBox.Show(ex.Message, "Не найдено", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					logger.Warn(ex.Message);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message, "Неизвестная ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					logger.Warn(ex.Message);
+				}
 			}
 		}
 
@@ -129,6 +148,7 @@ namespace WindowsFormsLocomotive
 		/// <param name="e"></param>
         private void listBoxDepots_SelectedIndexChanged(object sender, EventArgs e)
         {
+			logger.Info($"Перешли на парковку { listBoxDepots.SelectedItem.ToString() }");
 			Draw();
 		}
 
@@ -152,13 +172,30 @@ namespace WindowsFormsLocomotive
 		{
 			if (loco != null && listBoxDepots.SelectedIndex > -1)
 			{
-				if ((depotCollection[listBoxDepots.SelectedItem.ToString()]) + loco)
+				try
 				{
+					if ((depotCollection[listBoxDepots.SelectedItem.ToString()]) + loco)
+					{
+						Draw();
+						logger.Info($"Добавлен локомотив {loco}");
+
+					}
+					else
+					{
+						MessageBox.Show("Локомотив не удалось поставить");
+						logger.Warn($"Локомотив не удалось поставить {loco}");
+					}
 					Draw();
 				}
-				else
+				catch (DepotOverflowException ex)
 				{
-					MessageBox.Show("Машину не удалось поставить");
+					MessageBox.Show(ex.Message, "Переполнение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					logger.Warn(ex.Message);
+				}
+				catch (Exception ex)
+				{
+					MessageBox.Show(ex.Message, "Неизвестная ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					logger.Warn(ex.Message);
 				}
 			}
 		}
@@ -172,13 +209,18 @@ namespace WindowsFormsLocomotive
         {
 			if (saveFileDialog.ShowDialog() == DialogResult.OK)
 			{
-				if (depotCollection.SaveData(saveFileDialog.FileName))
-				{
-					MessageBox.Show("Сохранение прошло успешно", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                try
+                {
+					depotCollection.SaveData(saveFileDialog.FileName);
+					MessageBox.Show("Сохранение прошло успешно", "Результат", MessageBoxButtons.OK,
+						MessageBoxIcon.Information);
+					logger.Info("Сохранено в файл " + saveFileDialog.FileName);
 				}
-				else
+				catch(Exception ex)
 				{
-					MessageBox.Show("Не сохранилось", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(ex.Message, "Неизвестная ошибка при сохранении",
+						MessageBoxButtons.OK, MessageBoxIcon.Error);
+					logger.Warn(ex.Message);
 				}
 			}
 		}
@@ -192,15 +234,33 @@ namespace WindowsFormsLocomotive
         {
 			if (openFileDialog.ShowDialog() == DialogResult.OK)
 			{
-				if (depotCollection.LoadData(openFileDialog.FileName))
-				{
+                try
+                {
+					depotCollection.LoadData(openFileDialog.FileName);
 					MessageBox.Show("Загрузили", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					logger.Info("Загружено из файла " + openFileDialog.FileName);
 					ReloadLevels();
 					Draw();
 				}
-				else
+				catch (NullReferenceException ex)
 				{
-					MessageBox.Show("Не загрузили", "Результат", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(ex.Message, "Ошибка при сохранении", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					logger.Warn(ex.Message + openFileDialog.FileName);
+				}
+				catch (InvalidOperationException ex)
+                {
+					MessageBox.Show(ex.Message, "Ошибка при сохранении", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					logger.Warn(ex.Message + openFileDialog.FileName);
+				}
+				catch (IOException ex)
+                {
+					MessageBox.Show(ex.Message, "Ошибка при сохранении", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					logger.Warn(ex.Message + openFileDialog.FileName);
+				}
+				catch (Exception ex)
+                {
+					MessageBox.Show(ex.Message, "Неизвестная ошибка при сохранении", 
+						MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
