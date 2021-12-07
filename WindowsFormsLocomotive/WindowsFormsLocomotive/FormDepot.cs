@@ -174,6 +174,11 @@ namespace WindowsFormsLocomotive
 			{
 				try
 				{
+					if (depotCollection[listBoxDepots.SelectedItem.ToString()]._places.Contains(loco))
+                    {
+
+						throw new DepotAlreadyHaveException();
+                    }
 					if ((depotCollection[listBoxDepots.SelectedItem.ToString()]) + loco)
 					{
 						Draw();
@@ -182,7 +187,7 @@ namespace WindowsFormsLocomotive
 					}
 					else
 					{
-						MessageBox.Show("Локомотив не удалось поставить");
+						MessageBox.Show("На парковке уже есть такая машина");
 						logger.Error($"Локомотив не удалось поставить {loco}");
 					}
 					Draw();
@@ -190,6 +195,11 @@ namespace WindowsFormsLocomotive
 				catch (DepotOverflowException ex)
 				{
 					MessageBox.Show(ex.Message, "Переполнение", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					logger.Error(ex.Message);
+				}
+				catch (DepotAlreadyHaveException ex)
+				{
+					MessageBox.Show(ex.Message, "Дублирование", MessageBoxButtons.OK,MessageBoxIcon.Error);
 					logger.Error(ex.Message);
 				}
 				catch (Exception ex)
@@ -273,5 +283,20 @@ namespace WindowsFormsLocomotive
 				textBoxNewLevelName.Text = "";
 			}
         }
-    }
+
+		/// <summary>
+		/// Обработка нажатия кнопки "Сортировка"
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void buttonSort_Click(object sender, EventArgs e)
+        {
+			if (listBoxDepots.SelectedIndex > -1)
+			{
+				depotCollection[listBoxDepots.SelectedItem.ToString()].Sort();
+				Draw();
+				logger.Info("Сортировка уровней");
+			}
+		}
+	}
 }

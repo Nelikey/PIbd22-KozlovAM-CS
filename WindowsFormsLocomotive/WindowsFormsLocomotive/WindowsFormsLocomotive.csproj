@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="BaseLocomotive.cs" />
     <Compile Include="Depot.cs" />
+    <Compile Include="DepotAlreadyHaveException.cs" />
     <Compile Include="DepotCollection.cs" />
     <Compile Include="DepotNotFoundException.cs" />
     <Compile Include="DepotOverflowException.cs" />
@@ -80,6 +81,7 @@
       <DependentUpon>FormLocoConfig.cs</DependentUpon>
     </Compile>
     <Compile Include="ITransport.cs" />
+    <Compile Include="LocoComparer.cs" />
     <Compile Include="Locomotive.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

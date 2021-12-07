@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace WindowsFormsLocomotive
 {
-    class Locomotive : BaseLocomotive
+    class Locomotive : BaseLocomotive, IEquatable<Locomotive>
     {
         public Color DopColor { private set; get; }
         /// <summary>
@@ -130,5 +130,73 @@ namespace WindowsFormsLocomotive
         {
             return $"{base.ToString()}{separator}{DopColor.Name}{separator}{Smokestack}{separator}{FrontLight}{separator}{BackLight}{separator}{SideLine}";
         }
+
+        /// <summary>
+        /// Метод интерфейса IEquatable для класса Locomotive
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(Locomotive other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+            if (GetType().Name != other.GetType().Name)
+            {
+                return false;
+            }
+            if (MaxSpeed != other.MaxSpeed)
+            {
+                return false;
+            }
+            if (Weight != other.Weight)
+            {
+                return false;
+            }
+            if (MainColor != other.MainColor)
+            {
+                return false;
+            }
+            if (Smokestack != other.Smokestack)
+            {
+                return false;
+            }
+            if (FrontLight != other.FrontLight)
+            {
+                return false;
+            }
+            if (BackLight != other.BackLight)
+            {
+                return false;
+            }
+            if (SideLine != other.SideLine)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Перегрузка метода от object
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(Object obj)
+        {
+            if (obj == null)
+            {
+            return false;
+            }
+            if (!(obj is Locomotive carObj))
+            {
+                return false;
+            }
+            else
+            {
+                return Equals(carObj);
+            }
+        }
+
     }
 }

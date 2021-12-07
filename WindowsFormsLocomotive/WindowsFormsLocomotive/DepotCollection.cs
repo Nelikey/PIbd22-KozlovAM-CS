@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace WindowsFormsLocomotive
 {
@@ -107,24 +105,19 @@ namespace WindowsFormsLocomotive
                 {
                     //Начинаем парковку
                     streamWriter.WriteLine($"Depot{separator}{level.Key}");
-                    ITransport loco = null;
-                    for (int i = 0; (loco = level.Value.GetNext(i)) != null; i++)
+                    foreach (ITransport loco in level.Value)
                     {
-                        if (loco != null)
+                        //Записываем тип мшаины
+                        if (loco.GetType().Name == "BaseLocomotive")
                         {
-                            //если место не пустое
-                            //Записываем тип локомотива
-                            if (loco.GetType().Name == "BaseLocomotive")
-                            {
-                                streamWriter.Write($"BaseLocomotive{separator}");
-                            }
-                            if (loco.GetType().Name == "Locomotive")
-                            {
-                                streamWriter.Write($"Locomotive{separator}");
-                            }
-                            //Записываемые параметры
-                            streamWriter.WriteLine(loco);
+                            streamWriter.Write($"BaseLocomotive{separator}");
                         }
+                        if (loco.GetType().Name == "Locomotive")
+                        {
+                            streamWriter.Write($"Locomotive{separator}");
+                        }
+                        //Записываемые параметры
+                        streamWriter.WriteLine(loco);
                     }
                 }
             }

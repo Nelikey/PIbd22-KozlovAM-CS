@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace WindowsFormsLocomotive
 {
-    class BaseLocomotive : Vehicle
+    class BaseLocomotive : Vehicle, IEquatable<BaseLocomotive>
     {
         /// <summary>
         /// Ширина отрисовки локомотива
@@ -179,6 +179,57 @@ namespace WindowsFormsLocomotive
         public override string ToString()
         {
             return $"{MaxSpeed}{separator}{Weight}{separator}{MainColor.Name}";
+        }
+
+        /// <summary>
+        /// Метод интерфейса IEquatable для класса BaseLocomotive
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(BaseLocomotive other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+            if (GetType().Name != other.GetType().Name)
+            {
+                return false;
+            }
+            if (MaxSpeed != other.MaxSpeed)
+            {
+                return false;
+            }
+            if (Weight != other.Weight)
+            {
+                return false;
+            }
+            if (MainColor != other.MainColor)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Перегрузка метода от object
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(Object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+            if (!(obj is BaseLocomotive carObj))
+            {
+                return false;
+            }
+            else
+            {
+                return Equals(carObj);
+            }
         }
     }
 }
