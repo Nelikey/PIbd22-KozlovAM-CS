@@ -252,7 +252,7 @@ namespace WindowsFormsLocomotive
 					ReloadLevels();
 					Draw();
 				}
-				catch (NullReferenceException ex)
+				catch (FormatException ex)
 				{
 					MessageBox.Show(ex.Message, "Ошибка при сохранении", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					logger.Error(ex.Message + openFileDialog.FileName);
@@ -262,7 +262,7 @@ namespace WindowsFormsLocomotive
 					MessageBox.Show(ex.Message, "Ошибка при сохранении", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					logger.Error(ex.Message + openFileDialog.FileName);
 				}
-				catch (IOException ex)
+				catch (FileNotFoundException ex)
                 {
 					MessageBox.Show(ex.Message, "Ошибка при сохранении", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					logger.Error(ex.Message + openFileDialog.FileName);

@@ -132,13 +132,13 @@ namespace WindowsFormsLocomotive
         {
             if (!File.Exists(filename))
             {
-                throw new IOException("Файла по выбранному пути не существует: ");
+                throw new FileNotFoundException("Файла по выбранному пути не существует: ");
             }
             using (StreamReader streamReader = new StreamReader(filename, System.Text.Encoding.Default))
             {
                 if (!streamReader.ReadLine().Contains("DepotCollection"))
                 {
-                    throw new System.NullReferenceException("Выбранный файл не соответствует требованиям к загрузочному файлу: ");
+                    throw new System.FormatException("Выбранный файл не соответствует требованиям к загрузочному файлу: ");
                 }
                 //очищаем записи
                 depotStages.Clear();
