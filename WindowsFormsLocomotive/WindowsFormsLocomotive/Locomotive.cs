@@ -158,6 +158,10 @@ namespace WindowsFormsLocomotive
             {
                 return false;
             }
+            if (DopColor != other.DopColor)
+            {
+                return false;
+            }
             if (Smokestack != other.Smokestack)
             {
                 return false;
